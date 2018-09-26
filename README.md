@@ -11,7 +11,7 @@ However, I still recommend cloning the [root repository](https://github.com/Raio
 
 ### Clone
 ```bash
-# copy-past this code into console and execute
+# copy-paste this code into console and execute
 
 git clone https://github.com/Raiondesu/availability-check.git
 cd availability-check
