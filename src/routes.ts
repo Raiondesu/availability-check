@@ -1,3 +1,7 @@
+/**
+ * Main route handlers configuration file
+ */
+
 import { Route } from './types';
 import { route } from './util';
 

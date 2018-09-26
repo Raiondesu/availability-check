@@ -1,3 +1,7 @@
+/**
+ * Server abstraction file
+ */
+
 import { Server as InsecureServer, IncomingMessage, ServerResponse } from 'http';
 import { createServer, Server as SecureServer, ServerOptions } from 'https';
 import { parse as parseUrl } from 'url';

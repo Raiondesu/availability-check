@@ -1,3 +1,7 @@
+/**
+ * App configuration file
+ */
+
 const configs = {
   staging: {
     httpPort: 3000,
