@@ -14,6 +14,7 @@ However, I still recommend cloning the [root repository](https://github.com/Raio
 # copy-past this code into console and execute
 
 git clone https://github.com/Raiondesu/availability-check.git
+cd availability-check
 curl -o tsconfig.json https://raw.githubusercontent.com/Raiondesu/pirple-node-course/master/tsconfig.json
 
 npm i typescript ts-node ts-node-dev
