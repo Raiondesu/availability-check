@@ -17,7 +17,7 @@ git clone https://github.com/Raiondesu/availability-check.git
 cd availability-check
 curl -o tsconfig.json https://raw.githubusercontent.com/Raiondesu/pirple-node-course/master/tsconfig.json
 
-npm i typescript ts-node ts-node-dev
+npm i typescript ts-node ts-node-dev @types/node
 rm package-lock.json
 ```
 
