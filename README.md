@@ -7,7 +7,6 @@ This project is written entirely in TypeScript and has *some* npm dependencies. 
 ## Setup
 
 If you want to clone this repository separately - follow the instructions below.
-However, I still recommend cloning the [root repository](https://github.com/Raiondesu/pirple-node-course) instead.
 
 ### Clone
 ```bash
