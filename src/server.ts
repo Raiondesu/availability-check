@@ -8,9 +8,20 @@ import { fromPath } from './util';
 import { Route } from './types';
 import config from './config';
 
+/**
+ * Incapsulates the functionality behind http.Server and https.Server
+ */
 export default class Server {
+  /**
+   * Serves as internal server storage
+   */
   private internalServer!: InsecureServer | SecureServer;
 
+  /**
+   * Publicly available configured server port
+   *
+   * Relaunches server upon manual change
+   */
   public get port() {
     return this._port;
   }
@@ -21,6 +32,11 @@ export default class Server {
     this.internalServer.listen(v, this.listenStartCallback);
   }
 
+  /**
+   * Publicly available configured server protocol
+   *
+   * Relaunches server upon manual change
+   */
   public get protocol() {
     return this._protocol;
   }
@@ -31,7 +47,20 @@ export default class Server {
     this.initServer(p, this.port, this.routes, this.httpsConfig);
   }
 
+  /**
+   * Creates an instance of Server.
+   * @param protocol a protocol to serve by
+   * @param port a port to listen to
+   * @param routes a tree of routes available for requesting
+   */
   constructor(protocol: 'http', port: number, routes: Route.Tree);
+  /**
+   * Creates an instance of Server.
+   * @param protocol a protocol to serve by
+   * @param port a port to listen to
+   * @param routes a tree of routes available for requesting
+   * @param httpsConfig a config to pass if launching with https protocol
+   */
   constructor(protocol: 'https', port: number, routes: Route.Tree, httpsConfig?: ServerOptions);
   constructor(
     private _protocol: 'http' | 'https',
@@ -42,6 +71,10 @@ export default class Server {
     this.initServer(_protocol, _port, routes, httpsConfig);
   }
 
+
+  /**
+   * Inits server with respect to constructor parameters
+   */
   private initServer(protocol: 'https' | 'http', port: number, routes: Route.Tree, httpsConfig?: ServerOptions) {
     if (protocol === 'https') {
 
@@ -60,14 +93,26 @@ export default class Server {
     this.internalServer.listen(port, this.listenStartCallback);
   }
 
+  /**
+   * A callback to execute upon starting the server
+   */
   private listenStartCallback = () => {
     console.log(`Server listening on port ${this._port} under ${config.env} ${this._protocol}.`);
   };
 
+
+  /**
+   * A callback to execute upon stopping the server
+   */
   private listenEndCallback = () => {
     console.log(`Server stopped listening on port ${this._port} under ${config.env} ${this._protocol}.`);
   };
 
+  /**
+   * Server initializer factory function
+   *
+   * @param routes route handlers to bake into the server initializer
+   */
   private static Initialize = (routes: Route.Tree) => (req: IncomingMessage, res: ServerResponse) => {
     // Get url and parse it
     const parsedUrl = parseUrl(req.url || '', true);
