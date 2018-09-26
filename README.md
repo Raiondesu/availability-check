@@ -2,7 +2,7 @@
 
 This is a simple practice project made for [Pirple Node.js course](https://pirple.thinkific.com/courses/the-nodejs-master-class).
 
-This project is written entirely in TypeScript and has *some* npm dependencies. [Explanations](https://github.com/Raiondesu/pirple-node-course#Why-bother-with-TypeScript).
+This project is written entirely in TypeScript and has *some* npm dependencies. [Explanations](https://github.com/Raiondesu/pirple-node-course#user-content-why-bother-with-typescript).
 
 ## Setup
 
