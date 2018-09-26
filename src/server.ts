@@ -108,15 +108,17 @@ export default class Server {
       // Route the request to the handler
       const handlerData = await handler(data);
 
-      const statusCode = typeof handlerData.status === 'number' ? handlerData.status : 200;
+      const statusCode: number = typeof handlerData.status === 'number' ? handlerData.status : 200;
+      const payload: string = typeof handlerData.payload === 'string' ? handlerData.payload : JSON.stringify(handlerData.payload);
 
-      const payloadString = JSON.stringify(handlerData.payload);
+      if (typeof handlerData.payload === 'object') {
+        res.setHeader('Content-Type', 'application/json');
+      }
 
-      res.setHeader('Content-Type', 'application/json');
       res.writeHead(statusCode);
-      res.end(payloadString);
+      res.end(payload);
 
-      console.log(`${statusCode}: Returning %s to %s %s`, payloadString, method, trimmedPath);
+      console.log(`${statusCode}: Returning %s to %s %s`, payload, method, trimmedPath);
     });
   };
 }

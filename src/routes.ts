@@ -20,7 +20,7 @@ export default {
   // Hello handler
   'hello': route(data => ({
     status: 200,
-    payload: `Hello to you too, ${data.query.name || 'stranger'}!`
+    payload: `Hello to you too, ${data.query.name || 'stranger'}!\n`
   })),
 
   'ping': _ => ({ status: 200 }),
