@@ -1,5 +1,5 @@
 import { Route } from './types';
-import { route } from './misc';
+import { route } from './util';
 
 export default {
   // Sample handler

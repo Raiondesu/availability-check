@@ -4,7 +4,7 @@ import { parse as parseUrl } from 'url';
 import { StringDecoder } from 'string_decoder';
 import { readFileSync } from 'fs';
 
-import { fromPath } from './misc';
+import { fromPath } from './util';
 import { Route } from './types';
 import config from './config';
 
