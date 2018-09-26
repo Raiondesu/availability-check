@@ -30,7 +30,7 @@ NODE_ENV=%your_environment% ts-node-env index.ts
 **Option 2:** using pure node.js
 ```bash
 tsc
-NODE_ENV=%your_environment% node index.ts
+NODE_ENV=%your_environment% node index.js
 ```
 
 ## API
