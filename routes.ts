@@ -12,13 +12,19 @@ export default {
     'test': _data => ({
       status: 200,
       payload: {
-        test: 'Test 2-nd level handler'
+        test: 'Test 2-nd level sample handler'
       }
     })
   }),
 
+  // Hello handler
+  'hello': route(data => ({
+    status: 200,
+    payload: `Hello to you too, ${data.query.name || 'stranger'}!`
+  })),
+
   'ping': _ => ({ status: 200 }),
 
   // 404 handler
-  '*': () => ({ status: 404 })
+  '*': _ => ({ status: 404 })
 } as Route.Tree;

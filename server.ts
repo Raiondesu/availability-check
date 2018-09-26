@@ -98,8 +98,8 @@ export default class Server {
       const handler = fromPath(routes, trimmedPath, '/') || routes['*'];
 
       // Construct data to send to the handler
-      const data = {
-        trimmedPath,
+      const data: Route.Data = {
+        path: trimmedPath,
         query,
         headers,
         payload: buffer
