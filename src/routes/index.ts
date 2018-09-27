@@ -28,7 +28,7 @@ export default {
   // Returns a greeting string with a name (if stated)
   'hello': route(data => ({
     status: StatusCodes.OK,
-    payload: `Hello to you too, ${data.query.name || 'stranger'}!\n`
+    payload: `Hello to you too, ${data.query.name || 'stranger'}!`
   })),
 
   // Pings the server for uptime

@@ -150,7 +150,7 @@ export default class Server {
       let payload;
 
       // Parse payload based on content type
-      if (req.headers['content-type'] === 'application/json') {
+      if (buffer && method !== 'GET' && req.headers['content-type'] === 'application/json') {
         try {
           // Automatically parse payload if possible
           payload = JSON.parse(buffer);
@@ -185,7 +185,7 @@ export default class Server {
         const handlerData = await handler(data);
 
         const statusCode: StatusCodes = typeof handlerData.status === 'number' ? handlerData.status : StatusCodes.OK;
-        const payloadString: string = typeof handlerData.payload === 'string' ? handlerData.payload : JSON.stringify(handlerData.payload);
+        const payloadString: string = typeof handlerData.payload === 'string' ? handlerData.payload + '\n' : JSON.stringify(handlerData.payload);
 
         if (typeof handlerData.payload === 'object') {
           res.setHeader('Content-Type', 'application/json');

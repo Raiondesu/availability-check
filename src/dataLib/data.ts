@@ -82,11 +82,16 @@ export default class DataManager {
    * @param file filename
    * @returns file contents as JSON
    */
-  public read(file: string): Promise<any> {
+  public read<T = any>(file: string): Promise<T> {
     return new Promise((resolve, reject) => {
       fs.readFile(path.join(this.baseDir, file) + '.json', 'UTF-8', (readErr, data) => {
-        if (!readErr) {
-          resolve(data);
+        if (!readErr && data) {
+          try {
+            const obj = JSON.parse(data);
+            resolve(obj);
+          } catch (e) {
+            reject(e);
+          }
         } else {
           reject('Could not read a file. Nested exception: ' + readErr);
         }
@@ -130,8 +135,8 @@ export default class DataManager {
    * @param file filename
    * @returns file contents as JSON
    */
-  public static read(file: string): Promise<any> {
-    return this.defaultDataManager.read(file);
+  public static read<T = any>(file: string): Promise<T> {
+    return this.defaultDataManager.read<T>(file);
   }
 
   /**

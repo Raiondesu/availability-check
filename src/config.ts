@@ -6,11 +6,13 @@ const configs = {
   staging: {
     httpPort: 3000,
     httpsPort: 3001,
+    hashingSecret: 'thisIsASecret'
   },
 
   production: {
     httpPort: 5000,
     httpsPort: 5001,
+    hashingSecret: 'thisIsASecret'
   }
 };
 
