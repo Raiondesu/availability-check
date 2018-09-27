@@ -1,4 +1,11 @@
+/**
+ * Helpers for various tasks
+ */
+
+import { createHmac } from 'crypto';
+
 import { Route } from '../types';
+import config from '../config';
 
 /**
  * https://gist.github.com/Raiondesu/759425dede5b7ff38db51ea5a1fb8f11
@@ -34,4 +41,8 @@ export function route(handler: Route.Handler, children?: Route.Tree) {
   }
 
   return handler;
+}
+
+export function hash(str: string): string {
+  return createHmac('sha256', config.hashingSecret).update(str).digest('hex');
 }

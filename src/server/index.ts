@@ -149,14 +149,21 @@ export default class Server {
 
       let payload;
 
+      // Parse payload based on content type
       if (req.headers['content-type'] === 'application/json') {
         try {
+          // Automatically parse payload if possible
           payload = JSON.parse(buffer);
-        } catch (e) {
-          res.writeHead(StatusCodes.Conflict);
-          res.end('JSON expected, got string');
 
-          console.log(`${StatusCodes.Conflict}: Returning to %s %s`, method, trimmedPath);
+          if (typeof payload !== 'object') {
+            throw new TypeError();
+          }
+        } catch (e) {
+          // Emit error if content-type not valid
+          res.writeHead(StatusCodes.BadRequest);
+          res.end(String(e));
+
+          console.log(`${StatusCodes.BadRequest}: Returning to %s %s`, method, trimmedPath);
 
           return;
         }
@@ -170,23 +177,30 @@ export default class Server {
         query,
         headers,
         method,
-        payload: buffer
+        payload
       };
 
-      // Route the request to the handler
-      const handlerData = await handler(data);
+      try {
+        // Route the request to the handler
+        const handlerData = await handler(data);
 
-      const statusCode: StatusCodes = typeof handlerData.status === 'number' ? handlerData.status : StatusCodes.OK;
-      const payloadString: string = typeof handlerData.payload === 'string' ? handlerData.payload : JSON.stringify(handlerData.payload);
+        const statusCode: StatusCodes = typeof handlerData.status === 'number' ? handlerData.status : StatusCodes.OK;
+        const payloadString: string = typeof handlerData.payload === 'string' ? handlerData.payload : JSON.stringify(handlerData.payload);
 
-      if (typeof handlerData.payload === 'object') {
-        res.setHeader('Content-Type', 'application/json');
+        if (typeof handlerData.payload === 'object') {
+          res.setHeader('Content-Type', 'application/json');
+        } else {
+          res.setHeader('Content-Type', 'text/plain');
+        }
+
+        res.writeHead(statusCode);
+        res.end(payloadString);
+
+        console.log(`${statusCode}: %s; %s %s`, payloadString, method, trimmedPath);
+      } catch (e) {
+        res.writeHead(StatusCodes.InternalServerError);
+        res.end(String(e));
       }
-
-      res.writeHead(statusCode);
-      res.end(payloadString);
-
-      console.log(`${statusCode}: Returning %s to %s %s`, payloadString, method, trimmedPath);
     });
   };
 }

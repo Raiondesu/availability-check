@@ -2,17 +2,24 @@
  * Main route handlers configuration file
  */
 
-import { Route } from './types';
-import { route } from './util';
+import { Route } from '../types';
+import { route } from '../util';
+
+// Complex handlers
+import users from './handlers/users';
+import { StatusCodes } from '../server/statuses';
 
 export default {
+  // Users handler
+  users,
+
   // Sample handler
   'sample': route(_data => ({
-    status: 406,
+    status: StatusCodes.NotAcceptable,
     payload: { name: 'Sample handler' }
   }), {
     'test': _data => ({
-      status: 200,
+      status: StatusCodes.OK,
       payload: { test: 'Test 2-nd level sample handler' }
     })
   }),
@@ -20,13 +27,13 @@ export default {
   // Hello handler
   // Returns a greeting string with a name (if stated)
   'hello': route(data => ({
-    status: 200,
+    status: StatusCodes.OK,
     payload: `Hello to you too, ${data.query.name || 'stranger'}!\n`
   })),
 
   // Pings the server for uptime
-  'ping': _ => ({ status: 200 }),
+  'ping': _ => ({ status: StatusCodes.OK }),
 
   // 404 handler
-  '*': _ => ({ status: 404 })
+  '*': _ => ({ status: StatusCodes.NotFound })
 } as Route.Tree;
