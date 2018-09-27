@@ -1,5 +1,6 @@
 import { OutgoingHttpHeaders } from 'http';
 import { ParsedUrlQuery } from 'querystring';
+import { StatusCodes } from '../server/statuses';
 
 /**
  * A collection of types for Route Handlers definitions
@@ -9,18 +10,19 @@ export namespace Route {
    * Route Handler Payload
    */
   export type Payload<T> = {
-    status: number;
+    status: StatusCodes;
     payload?: T;
   };
 
   /**
    * Route Handler's Request-data
    */
-  export type Data = {
+  export type Data<T = any> = {
     path: string;
     query: ParsedUrlQuery;
     headers: OutgoingHttpHeaders;
-    payload: any;
+    method: string;
+    payload: T;
   };
 
   /**

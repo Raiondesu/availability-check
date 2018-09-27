@@ -8,9 +8,10 @@ import { parse as parseUrl } from 'url';
 import { StringDecoder } from 'string_decoder';
 import { readFileSync } from 'fs';
 
-import { fromPath } from './util';
-import { Route } from './types';
-import config from './config';
+import { fromPath } from '../util';
+import { Route } from '../types';
+import config from '../config';
+import { StatusCodes } from './statuses';
 
 /**
  * Incapsulates the functionality behind http.Server and https.Server
@@ -122,11 +123,11 @@ export default class Server {
     const parsedUrl = parseUrl(req.url || '', true);
 
     // Get path and query params
-    const trimmedPath = parsedUrl.pathname!.replace(/(^\/+)|(\/+$)/g, '');
+    const trimmedPath = (parsedUrl.pathname || '').replace(/(^\/+)|(\/+$)/g, '');
     const query = parsedUrl.query;
 
     // Get request method
-    const method = req.method!;
+    const method = (req.method || 'GET').toUpperCase();
 
     // Get headers as object
     const headers = req.headers;
@@ -146,28 +147,46 @@ export default class Server {
       // Choose the route handler
       const handler = fromPath(routes, trimmedPath, '/') || routes['*'];
 
+      let payload;
+
+      if (req.headers['content-type'] === 'application/json') {
+        try {
+          payload = JSON.parse(buffer);
+        } catch (e) {
+          res.writeHead(StatusCodes.Conflict);
+          res.end('JSON expected, got string');
+
+          console.log(`${StatusCodes.Conflict}: Returning to %s %s`, method, trimmedPath);
+
+          return;
+        }
+      } else {
+        payload = buffer;
+      }
+
       // Construct data to send to the handler
       const data: Route.Data = {
         path: trimmedPath,
         query,
         headers,
+        method,
         payload: buffer
       };
 
       // Route the request to the handler
       const handlerData = await handler(data);
 
-      const statusCode: number = typeof handlerData.status === 'number' ? handlerData.status : 200;
-      const payload: string = typeof handlerData.payload === 'string' ? handlerData.payload : JSON.stringify(handlerData.payload);
+      const statusCode: StatusCodes = typeof handlerData.status === 'number' ? handlerData.status : StatusCodes.OK;
+      const payloadString: string = typeof handlerData.payload === 'string' ? handlerData.payload : JSON.stringify(handlerData.payload);
 
       if (typeof handlerData.payload === 'object') {
         res.setHeader('Content-Type', 'application/json');
       }
 
       res.writeHead(statusCode);
-      res.end(payload);
+      res.end(payloadString);
 
-      console.log(`${statusCode}: Returning %s to %s %s`, payload, method, trimmedPath);
+      console.log(`${statusCode}: Returning %s to %s %s`, payloadString, method, trimmedPath);
     });
   };
 }
