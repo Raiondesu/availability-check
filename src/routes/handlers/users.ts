@@ -1,14 +1,8 @@
-import { route, hash } from '../../util';
-import { Route } from '../../types';
+import { hash } from '../../util';
 import { StatusCodes } from '../../server/statuses';
-import DataManager from '../../dataLib/data';
-
-interface UserResponse extends UserUpdate {
-  firstName: string;
-  lastName: string;
-  phone: string;
-  tosAgreement: any;
-}
+import DataManager from '../../lib/data';
+import { RouteData, RoutePayload } from '../../lib/route/types';
+import Route from '../../lib/route';
 
 interface UserUpdate {
   firstName?: string;
@@ -16,6 +10,13 @@ interface UserUpdate {
   phone: string;
   password?: string;
   tosAgreement?: any;
+}
+
+interface UserResponse extends UserUpdate {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  tosAgreement: any;
 }
 
 interface UserRequest extends UserResponse {
@@ -57,7 +58,7 @@ function validateFields(payload, required) {
 }
 
 const users = {
-  async POST(data: Route.Data<UserRequest>): Promise<Route.Payload<any>> {
+  async POST(data: RouteData<UserRequest>): Promise<RoutePayload<any>> {
     // Check user fields
     const required = {
       'firstName': 'string',
@@ -109,7 +110,7 @@ const users = {
 
   // Requres query parameter "phone"
   // @TODO: only let authenticated uses access their data
-  async GET(data: Route.Data): Promise<Route.Payload<UserResponse | string>> {
+  async GET(data: RouteData): Promise<RoutePayload<UserResponse | string>> {
     if (!data.query.phone) {
       return {
         status: StatusCodes.BadRequest,
@@ -141,7 +142,7 @@ const users = {
 
   // Required Field: phone
   // @TODO: only let authenticated uses access their data
-  async PUT(data: Route.Data<UserUpdate>): Promise<Route.Payload<string | UserResponse>> {
+  async PUT(data: RouteData<UserUpdate>): Promise<RoutePayload<string | UserResponse>> {
     validateFields(data.payload, {
       'phone': 'string'
     });
@@ -177,7 +178,7 @@ const users = {
   },
 
   // Required: phone query parameter
-  async DELETE(data: Route.Data): Promise<Route.Payload<UserResponse | string>> {
+  async DELETE(data: RouteData): Promise<RoutePayload<UserResponse | string>> {
     validateFields(data.query, {
       'phone': 'string'
     });
@@ -206,7 +207,7 @@ const users = {
   }
 };
 
-export default route(async data => {
+export default Route.with(async data => {
   const acceptableMethods = Object.keys(users);
 
   if (acceptableMethods.includes(data.method)) {
@@ -216,6 +217,4 @@ export default route(async data => {
       status: StatusCodes.NotAcceptable
     };
   }
-
-  return {};
 });

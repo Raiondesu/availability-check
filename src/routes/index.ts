@@ -2,20 +2,19 @@
  * Main route handlers configuration file
  */
 
-import { Route } from '../types';
-import { route } from '../util';
+import Route from '../lib/route';
+import { StatusCodes } from '../server/statuses';
 
 // Complex handlers
 import users from './handlers/users';
-import { StatusCodes } from '../server/statuses';
 
 // Export final routing tree
-export default {
+const routeTree = {
   // Users handler
   users,
 
   // Sample handler
-  'sample': route(_data => ({
+  'sample': new Route(_data => ({
     status: StatusCodes.NotAcceptable,
     payload: { name: 'Sample handler' }
   }), {
@@ -27,7 +26,7 @@ export default {
 
   // Hello handler
   // Returns a greeting string with a name (if stated)
-  'hello': route(data => ({
+  'hello': Route.with(data => ({
     status: StatusCodes.OK,
     payload: `Hello to you too, ${data.query.name || 'stranger'}!`
   })),
@@ -40,4 +39,6 @@ export default {
 
   // 404 handler
   '*': _ => ({ status: StatusCodes.NotFound })
-} as Route.Tree;
+};
+
+export default Route.with(routeTree);

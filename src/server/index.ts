@@ -8,10 +8,10 @@ import { parse as parseUrl } from 'url';
 import { StringDecoder } from 'string_decoder';
 import { readFileSync } from 'fs';
 
-import { fromPath } from '../util';
-import { Route } from '../types';
+import { RouteTree, RouteData, RoutePayload, RouteMethod } from '../lib/route/types';
 import config from '../config';
 import { StatusCodes } from './statuses';
+import Route from '../lib/route';
 
 /**
  * Incapsulates the functionality behind http.Server and https.Server
@@ -58,7 +58,7 @@ export default class Server {
    * @param port a port to listen to
    * @param routes a tree of routes available for requesting
    */
-  constructor(protocol: 'http', port: number, routes: Route.Tree);
+  constructor(protocol: 'http', port: number, routes: RouteTree);
   /**
    * Creates an instance of Server.
    * @param protocol a protocol to serve by
@@ -66,11 +66,11 @@ export default class Server {
    * @param routes a tree of routes available for requesting
    * @param httpsConfig a config to pass if launching with https protocol
    */
-  constructor(protocol: 'https', port: number, routes: Route.Tree, httpsConfig?: ServerOptions);
+  constructor(protocol: 'https', port: number, routes: RouteTree, httpsConfig?: ServerOptions);
   constructor(
     private _protocol: 'http' | 'https',
     private _port: number,
-    public readonly routes: Route.Tree,
+    public readonly routes: RouteTree,
     private readonly httpsConfig?: ServerOptions
   ) {
     this.initServer(_protocol, _port, routes, httpsConfig);
@@ -80,7 +80,7 @@ export default class Server {
   /**
    * Inits server with respect to constructor parameters
    */
-  private initServer(protocol: 'https' | 'http', port: number, routes: Route.Tree, httpsConfig?: ServerOptions) {
+  private initServer(protocol: 'https' | 'http', port: number, routes: RouteTree, httpsConfig?: ServerOptions) {
     if (protocol === 'https') {
 
       this.internalServer = createServer({
@@ -118,7 +118,7 @@ export default class Server {
    *
    * @param routes route handlers to bake into the server initializer
    */
-  private static readonly Initialize = (routes: Route.Tree) => (req: IncomingMessage, res: ServerResponse) => {
+  private static readonly Initialize = (routes: RouteTree) => (req: IncomingMessage, res: ServerResponse) => {
     // Get url and parse it
     const parsedUrl = parseUrl(req.url || '', true);
 
@@ -127,7 +127,7 @@ export default class Server {
     const query = parsedUrl.query;
 
     // Get request method
-    const method = (req.method || 'GET').toUpperCase();
+    const method = (req.method || 'GET').toUpperCase() as RouteMethod;
 
     // Get headers as object
     const headers = req.headers;
@@ -145,7 +145,7 @@ export default class Server {
       buffer += decoder.end();
 
       // Choose the route handler
-      const handler = fromPath(routes, trimmedPath, '/') || routes['*'];
+      const handler = Route.fromPath(routes, trimmedPath, method, '/') || Route.NotFoundHandler;
 
       let payload;
 
@@ -172,7 +172,7 @@ export default class Server {
       }
 
       // Construct data to send to the handler
-      const data: Route.Data = {
+      const data: RouteData = {
         path: trimmedPath,
         query,
         headers,
@@ -197,6 +197,7 @@ export default class Server {
         }
       } catch (e) {
         payloadString = String(e);
+        console.error(e);
       } finally {
         res.writeHead(statusCode);
         res.end(payloadString);
