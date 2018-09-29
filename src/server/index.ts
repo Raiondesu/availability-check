@@ -180,26 +180,28 @@ export default class Server {
         payload
       };
 
+      let statusCode = StatusCodes.InternalServerError;
+      let payloadString = '';
+
       try {
         // Route the request to the handler
         const handlerData = await handler(data);
 
-        const statusCode: StatusCodes = typeof handlerData.status === 'number' ? handlerData.status : StatusCodes.OK;
-        const payloadString: string = typeof handlerData.payload === 'string' ? handlerData.payload + '\n' : JSON.stringify(handlerData.payload);
+        statusCode = typeof handlerData.status === 'number' ? handlerData.status : StatusCodes.OK;
+        payloadString = typeof handlerData.payload === 'string' ? handlerData.payload + '\n' : JSON.stringify(handlerData.payload);
 
         if (typeof handlerData.payload === 'object') {
           res.setHeader('Content-Type', 'application/json');
         } else {
           res.setHeader('Content-Type', 'text/plain');
         }
-
+      } catch (e) {
+        payloadString = String(e);
+      } finally {
         res.writeHead(statusCode);
         res.end(payloadString);
 
-        console.log(`${statusCode}: %s; %s %s`, payloadString, method, trimmedPath);
-      } catch (e) {
-        res.writeHead(StatusCodes.InternalServerError);
-        res.end(String(e));
+        console.log(`${statusCode} - ${method} - ${trimmedPath}: ${payloadString}`);
       }
     });
   };
