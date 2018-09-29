@@ -9,16 +9,44 @@ export default class Route {
   constructor(handlers: RouteMethodHandlers, naHandler: RouteHandler);
   constructor() {
     if (typeof arguments[1] === 'function') {
-      this.handler = arguments[0];
-      this.naHandler = arguments[1];
+      this.handler = arguments[0] as RouteHandler;
+      this.naHandler = arguments[1] || Route.NotAcceptableHandler;
     } else {
       this.handler = Route.with(arguments[0], arguments[1]);
       this.naHandler = this.handler;
     }
   }
 
+  public get methods(): object | string | string[] {
+    if (this.handler !== this.naHandler) {
+      const methods = Object.keys(this.handler);
+
+      return methods.length === 1 ? methods[0] : methods;
+    } else {
+      return Object.keys(this.handler).reduce((obj, key) => {
+        obj[key] = Route.SeeChildrenHandler(this.handler[key])(undefined).payload;
+
+        return obj;
+      }, {
+        '/': 'any'
+      } as any);
+    }
+  }
+
   public static readonly SeeChildrenHandler = (children: RouteTree) => {
-    const routes = Object.keys(children);
+    let routes = {};
+
+    for (const route in children) {
+      if (children[route] instanceof Route) {
+        routes[route] = children[route].methods;
+      } else {
+        routes[route] = Route.SeeChildrenHandler(children[route])(undefined).payload;
+      }
+    }
+
+    if (Object.keys(routes).length === 0) {
+      routes = 'any';
+    }
 
     return _ => ({
       status: StatusCodes.Found,
@@ -28,6 +56,10 @@ export default class Route {
 
   public static readonly NotFoundHandler = _ => ({
     status: StatusCodes.NotFound
+  });
+
+  public static readonly NotAcceptableHandler = _ => ({
+    status: StatusCodes.NotAcceptable
   });
 
   /**
@@ -58,7 +90,7 @@ export default class Route {
       return handler;
     }
 
-    const tempHandler = handler;
+    const tempHandler = handler || Route.NotFoundHandler;
     const newHandler = Route.SeeChildrenHandler(tempHandler);
 
     for (const route in tempHandler) {
