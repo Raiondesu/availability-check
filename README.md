@@ -46,8 +46,8 @@ param           |   type   | description
 ----------------|----------|---------------
 name `optional` | `string` | Lets the server know who to greet. 😉
 
-Return status: `200`
-Return payload type: string
+Return status: `200`;
+Return payload type: string;
 
 Examples:
 ```bash
@@ -62,19 +62,24 @@ Hello to you too, Alex!
 
 Just a sample route to demonstrate that the app can have other routes. 😅
 
-Return status: `406`
-Return payload type: `JSON`
+Return status: `406`;
+Return payload type: `JSON`;
 
 ### `/sample/test`
 
 Just a sample route to demonstrate that the app can have multi-level routes.
 
-Return status: `200`
-Return payload type: `JSON`
+Return status: `200`;
+Return payload type: `JSON`;
 
 ### `/ping`
 
 Checks whether the server is up.
 
-Return status: `200`
-Return payload type: none
+Return status: `200`;
+Return payload type: none;
+
+### `/who-are-you`
+
+Return status: `418`;
+Return payload type: none;

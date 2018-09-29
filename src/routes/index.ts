@@ -31,6 +31,9 @@ export default {
     payload: `Hello to you too, ${data.query.name || 'stranger'}!`
   })),
 
+  // Just a little joke
+  'who-are-you': _ => ({ status: StatusCodes.Teapot }),
+
   // Pings the server for uptime
   'ping': _ => ({ status: StatusCodes.OK }),
 
