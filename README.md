@@ -4,9 +4,11 @@ This is a simple practice project made for [Pirple Node.js course](https://pirpl
 
 This project is written entirely in TypeScript and has *some* npm dependencies. [Explanations](https://github.com/Raiondesu/pirple-node-course#user-content-why-bother-with-typescript).
 
+[root course repository](https://github.com/Raiondesu/pirple-node-course)
+
 ## Setup
 
-If you want to clone this repository separately - follow the instructions below.
+If you want to clone this repository separately from the [root project](https://github.com/Raiondesu/pirple-node-course) - follow the instructions below.
 
 ### Clone
 ```bash
