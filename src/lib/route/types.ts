@@ -4,7 +4,8 @@
 
 import { OutgoingHttpHeaders } from 'http';
 import { ParsedUrlQuery } from 'querystring';
-import { StatusCodes } from '../../server/statuses';
+import { StatusCodes } from '../server';
+import Route from '.';
 
 
 export type RouteMethodHandlers = {
@@ -35,12 +36,11 @@ export type RouteData<T = any> = {
  */
 export type RouteHandler<T = any> = (data: RouteData) => (Promise<RoutePayload<T>> | RoutePayload<T>);
 
-
 /**
  * Route handler type that allows subroutes
  */
 export type RouteTree<T extends undefined | {
-  [child: string]: RouteTree;
+  [child: string]: RouteTree | Route;
 } = any> = T extends undefined ? RouteHandler : (RouteHandler & T);
 
 export type RouteMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS';
