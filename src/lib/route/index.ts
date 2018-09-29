@@ -1,11 +1,27 @@
 import { RouteData, RouteHandler, RouteTree, RoutePayload, RouteMethod, RouteMethodHandlers } from './types';
 import { StatusCodes } from '../server/statuses';
 
+/**
+ * @todo document this shit
+ */
 export default class Route {
+  /**
+   * @todo document this shit
+   */
   private readonly handler: RouteMethodHandlers | RouteTree;
+
+  /**
+   * @todo document this shit
+   */
   private readonly naHandler: RouteHandler;
 
+  /**
+   * @todo document this shit
+   */
   constructor(handler: RouteHandler, children?: RouteTree);
+  /**
+   * @todo document this shit
+   */
   constructor(handlers: RouteMethodHandlers, naHandler: RouteHandler);
   constructor() {
     if (typeof arguments[1] === 'function') {
@@ -17,6 +33,9 @@ export default class Route {
     }
   }
 
+  /**
+   * @todo document this shit
+   */
   public get methods(): object | string | string[] {
     if (this.handler !== this.naHandler) {
       const methods = Object.keys(this.handler);
@@ -33,6 +52,9 @@ export default class Route {
     }
   }
 
+  /**
+   * @todo document this shit
+   */
   public static readonly SeeChildrenHandler = (children: RouteTree) => {
     let routes = {};
 
@@ -54,10 +76,16 @@ export default class Route {
     });
   };
 
+  /**
+   * @todo document this shit
+   */
   public static readonly NotFoundHandler = _ => ({
     status: StatusCodes.NotFound
   });
 
+  /**
+   * @todo document this shit
+   */
   public static readonly NotAcceptableHandler = _ => ({
     status: StatusCodes.NotAcceptable
   });
@@ -115,6 +143,9 @@ export default class Route {
     return this._fromPath(routes, path, method, splitter);
   }
 
+  /**
+   * @todo document this shit
+   */
   private static _fromPath(
     routes: RouteTree,
     path: string | RegExp,
