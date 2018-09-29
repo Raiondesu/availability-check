@@ -9,7 +9,7 @@ import { StatusCodes } from '../lib/server';
 import users from './handlers/users';
 
 // Export final routing tree
-const routeTree = {
+export default Route.with({
   // Users handler
   users,
 
@@ -42,6 +42,4 @@ const routeTree = {
 
   // 404 handler
   '*': _ => ({ status: StatusCodes.NotFound })
-};
-
-export default Route.with(routeTree);
+});
