@@ -138,10 +138,6 @@ export default class Route {
       return toHandler(routes[key]);
     }
 
-    if (!routes[key]) {
-      return nfHandler;
-    }
-
     const nextRoute = toHandler(routes[key]);
 
     return this._fromPath(
