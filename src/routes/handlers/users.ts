@@ -57,7 +57,7 @@ function validateFields(payload, required) {
   return;
 }
 
-const users = {
+export default new Route({
   async POST(data: RouteData<UserRequest>): Promise<RoutePayload<any>> {
     // Check user fields
     const required = {
@@ -205,16 +205,4 @@ const users = {
       };
     }
   }
-};
-
-export default Route.with(async data => {
-  const acceptableMethods = Object.keys(users);
-
-  if (acceptableMethods.includes(data.method)) {
-    return users[data.method](data);
-  } else {
-    return {
-      status: StatusCodes.NotAcceptable
-    };
-  }
-});
+}, Route.NotAcceptableHandler);
