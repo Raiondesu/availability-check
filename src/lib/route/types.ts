@@ -41,6 +41,6 @@ export type RouteHandler<T = any> = (data: RouteData) => (Promise<RoutePayload<T
  */
 export type RouteTree<T extends undefined | {
   [child: string]: RouteTree | Route;
-} = any> = T extends undefined ? RouteHandler : (RouteHandler & T);
+} = undefined> = T extends undefined ? RouteHandler : (RouteHandler & T);
 
 export type RouteMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS';
