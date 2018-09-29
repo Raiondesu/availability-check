@@ -212,7 +212,9 @@ export default route(async data => {
   if (acceptableMethods.includes(data.method)) {
     return users[data.method](data);
   } else {
-
+    return {
+      status: StatusCodes.NotAcceptable
+    };
   }
 
   return {};
