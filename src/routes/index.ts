@@ -32,7 +32,10 @@ const routeTree = {
   })),
 
   // Just a little joke
-  'who-are-you': _ => ({ status: StatusCodes.Teapot }),
+  'who-are-you': _ => ({
+    status: StatusCodes.Teapot,
+    payload: `I'm a teapot.`
+  }),
 
   // Pings the server for uptime
   'ping': _ => ({ status: StatusCodes.OK }),

@@ -36,7 +36,7 @@ NODE_ENV=%your_environment% node index.js
 
 **DEFAULT PORTS: `3000` and `3001`**
 
-All requests to routes that aren't specified below will return status `404`.
+All requests to routes that aren't specified below will return status `404` or `302` with possible routes list.
 
 ### `/hello`
 
@@ -82,4 +82,4 @@ Return payload type: none;
 ### `/who-are-you`
 
 Return status: `418`;
-Return payload type: none;
+Return payload type: string;
