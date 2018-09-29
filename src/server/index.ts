@@ -118,7 +118,7 @@ export default class Server {
    *
    * @param routes route handlers to bake into the server initializer
    */
-  private static Initialize = (routes: Route.Tree) => (req: IncomingMessage, res: ServerResponse) => {
+  private static readonly Initialize = (routes: Route.Tree) => (req: IncomingMessage, res: ServerResponse) => {
     // Get url and parse it
     const parsedUrl = parseUrl(req.url || '', true);
 
