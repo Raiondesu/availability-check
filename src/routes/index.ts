@@ -9,6 +9,7 @@ import { route } from '../util';
 import users from './handlers/users';
 import { StatusCodes } from '../server/statuses';
 
+// Export final routing tree
 export default {
   // Users handler
   users,
