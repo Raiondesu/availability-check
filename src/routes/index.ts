@@ -3,7 +3,7 @@
  */
 
 import Route from '../lib/route';
-import { StatusCodes } from '../server/statuses';
+import { StatusCodes } from '../lib/server';
 
 // Complex handlers
 import users from './handlers/users';

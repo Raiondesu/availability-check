@@ -2,8 +2,8 @@
  * Entry API file
  */
 
+import Server from './src/lib/server';
 import config from './src/config';
-import Server from './src/server';
 import routes from './src/routes';
 
 // Launch HTTP server

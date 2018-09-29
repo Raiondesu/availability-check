@@ -1,5 +1,5 @@
 import { hash } from '../../util';
-import { StatusCodes } from '../../server/statuses';
+import { StatusCodes } from '../../lib/server';
 import DataManager from '../../lib/data';
 import { RouteData, RoutePayload } from '../../lib/route/types';
 import Route from '../../lib/route';

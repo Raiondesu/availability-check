@@ -1,5 +1,5 @@
 import { RouteData, RouteHandler, RouteTree, RoutePayload, RouteMethod, RouteMethodHandlers } from './types';
-import { StatusCodes } from '../../server/statuses';
+import { StatusCodes } from '../server/statuses';
 
 export default class Route {
   private readonly handler: RouteMethodHandlers | RouteTree;

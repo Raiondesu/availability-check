@@ -8,10 +8,11 @@ import { parse as parseUrl } from 'url';
 import { StringDecoder } from 'string_decoder';
 import { readFileSync } from 'fs';
 
-import { RouteTree, RouteData, RoutePayload, RouteMethod } from '../lib/route/types';
-import config from '../config';
+import { RouteTree, RouteData, RoutePayload, RouteMethod } from '../route/types';
 import { StatusCodes } from './statuses';
-import Route from '../lib/route';
+import Route from '../route';
+
+export { StatusCodes };
 
 /**
  * Incapsulates the functionality behind http.Server and https.Server
@@ -102,7 +103,7 @@ export default class Server {
    * A callback to execute upon starting the server
    */
   private listenStartCallback = () => {
-    console.log(`Server listening on port ${this._port} under ${config.env} ${this._protocol}.`);
+    console.log(`Server listening on port ${this._port} under ${this._protocol}.`);
   };
 
 
@@ -110,7 +111,7 @@ export default class Server {
    * A callback to execute upon stopping the server
    */
   private listenEndCallback = () => {
-    console.log(`Server stopped listening on port ${this._port} under ${config.env} ${this._protocol}.`);
+    console.log(`Server stopped listening on port ${this._port} under ${this._protocol}.`);
   };
 
   /**
