@@ -203,7 +203,7 @@ export default class Server {
         res.writeHead(statusCode);
         res.end(payloadString);
 
-        console.log(`${statusCode} - ${method} - ${trimmedPath}: ${payloadString}`);
+        console.log(`Response ${statusCode} - ${method} - /${trimmedPath}: ${payloadString}`);
       }
     });
   };
