@@ -54,14 +54,14 @@ export default class Server {
   }
 
   /**
-   * Creates an instance of Server.
+   * Creates an instance of Server and launches it.
    * @param protocol a protocol to serve by
    * @param port a port to listen to
    * @param routes a tree of routes available for requesting
    */
   constructor(protocol: 'http', port: number, routes: RouteTree);
   /**
-   * Creates an instance of Server.
+   * Creates an instance of Server and launches it.
    * @param protocol a protocol to serve by
    * @param port a port to listen to
    * @param routes a tree of routes available for requesting
