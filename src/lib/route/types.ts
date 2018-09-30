@@ -8,17 +8,17 @@ import { StatusCodes } from '../server';
 import Route from '.';
 
 
-export type RouteMethodHandlers = {
-  [method in RouteMethod]?: RouteHandler;
-};
+// export type RouteMethodHandlers = {
+//   [method in RouteMethod]?: RouteHandler;
+// };
 
 /**
  * Route Handler Payload
  */
-export type RoutePayload<T> = {
-  status: StatusCodes;
-  payload?: T;
-};
+// export type RoutePayload<T = any> = {
+//   status: StatusCodes;
+//   payload?: T;
+// };
 
 /**
  * Route Handler's Request-data
@@ -34,13 +34,23 @@ export type RouteData<T = any> = {
 /**
  * Route handler type
  */
-export type RouteHandler<T = any> = (data: RouteData) => (Promise<RoutePayload<T>> | RoutePayload<T>);
+// export interface RouteHandler {
+//   // <T = any>(data: RouteData): RoutePayload<T>;
+//   <T = any>(data: RouteData): Promise<RoutePayload<T>>;
+//   // <T = any>(): Promise<RoutePayload<T>>;
+//   <T = any>(): RoutePayload<T>;
+// }
+
+/**
+ * Route subroutes
+ */
+// export type RouteChildren = {
+//   [child: string]: RouteTree | Route;
+// };
 
 /**
  * Route handler type that allows subroutes
  */
-export type RouteTree<T extends undefined | {
-  [child: string]: RouteTree | Route;
-} = undefined> = T extends undefined ? RouteHandler : (RouteHandler & T);
+// export type RouteTree<T extends undefined | RouteChildren = undefined> = T extends undefined ? RouteHandler : (RouteHandler & T);
 
 export type RouteMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS';

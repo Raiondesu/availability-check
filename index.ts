@@ -2,9 +2,9 @@
  * Entry API file
  */
 
-import Server from './src/lib/server';
-import config from './src/config';
-import routes from './src/routes';
+import Server from 'lib/server';
+import routes from 'routes';
+import config from 'config';
 
 // Launch HTTP server
 const httpServer = new Server('http', config.httpPort, routes);

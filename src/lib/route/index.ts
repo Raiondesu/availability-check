@@ -1,35 +1,35 @@
-import { RouteData, RouteHandler, RouteTree, RoutePayload, RouteMethod, RouteMethodHandlers } from './types';
+// import { RouteData, RouteHandler, RouteTree, RoutePayload, RouteMethod, RouteMethodHandlers, RouteChildren } from './types';
 import { StatusCodes } from '../server/statuses';
 
 /**
  * @todo document this shit
  */
-export default class Route {
+export default class Route/* <T extends RouteChildren | undefined = undefined> */ {
   /**
    * @todo document this shit
    */
-  private readonly handler: RouteMethodHandlers | RouteTree;
+  private readonly handler/* : RouteMethodHandlers | (T extends undefined ? RouteHandler : RouteTree<T>) */;
 
   /**
    * @todo document this shit
    */
-  private readonly naHandler: RouteHandler;
+  private readonly naHandler/* : RouteHandler */;
 
   /**
    * @todo document this shit
    */
-  constructor(handler: RouteHandler, children?: RouteTree);
-  /**
-   * @todo document this shit
-   */
-  constructor(handlers: RouteMethodHandlers, naHandler: RouteHandler);
-  constructor() {
+  // constructor(handler: RouteHandler, children?: T);
+  // /**
+  //  * @todo document this shit
+  //  */
+  // constructor(handlers: RouteMethodHandlers, naHandler: RouteHandler);
+  constructor(handlers/* : RouteMethodHandlers | RouteTree<T> */, naHandlerChildren?/* : RouteHandler | T */) {
     if (typeof arguments[1] === 'function') {
-      this.handler = arguments[0] as RouteHandler;
-      this.naHandler = arguments[1] || Route.NotAcceptableHandler;
+      this.handler = handlers as any;
+      this.naHandler = naHandlerChildren/*  as RouteHandler */ || Route.NotAcceptableHandler;
     } else {
-      this.handler = Route.with(arguments[0], arguments[1]);
-      this.naHandler = this.handler;
+      this.handler = Route.with(handlers/*  as RouteTree<T> */, naHandlerChildren/*  as T */);
+      this.naHandler = this.handler/*  as RouteTree */;
     }
   }
 
@@ -43,7 +43,7 @@ export default class Route {
       return methods.length === 1 ? methods[0] : methods;
     } else {
       return Object.keys(this.handler).reduce((obj, key) => {
-        obj[key] = Route.SeeChildrenHandler(this.handler[key])(undefined).payload;
+        obj[key] = Route.SeeChildrenHandler(this.handler[key])({} as any).payload;
 
         return obj;
       }, {
@@ -55,14 +55,14 @@ export default class Route {
   /**
    * @todo document this shit
    */
-  public static readonly SeeChildrenHandler = (children: RouteTree) => {
+  public static readonly SeeChildrenHandler = (children/* : RouteTree */)/* : RouteHandler */ => _ => {
     let routes = {};
 
     for (const route in children) {
       if (children[route] instanceof Route) {
         routes[route] = children[route].methods;
       } else {
-        routes[route] = Route.SeeChildrenHandler(children[route])(undefined).payload;
+        routes[route] = (Route.SeeChildrenHandler(children[route])({} as any)/*  as RoutePayload */).payload;
       }
     }
 
@@ -70,23 +70,23 @@ export default class Route {
       routes = 'any';
     }
 
-    return _ => ({
+    return {
       status: StatusCodes.Found,
       payload: routes
-    });
+    };
   };
 
   /**
    * @todo document this shit
    */
-  public static readonly NotFoundHandler = _ => ({
+  public static readonly NotFoundHandler/* : RouteHandler */ = () => ({
     status: StatusCodes.NotFound
   });
 
   /**
    * @todo document this shit
    */
-  public static readonly NotAcceptableHandler = _ => ({
+  public static readonly NotAcceptableHandler/* : RouteHandler */ = () => ({
     status: StatusCodes.NotAcceptable
   });
 
@@ -97,7 +97,7 @@ export default class Route {
    * @param tree a routing tree to define the routes by
    * @returns processed route handler
    */
-  public static with(tree: RouteTree): RouteTree;
+  public static with/* <T extends RouteChildren> */(tree/* : T */)/* : RouteTree<T> */;
   /**
    * A little helper for simple nested routes initialization and type-checking.
    * A more optimized way of route initialization that instantiating a Route class.
@@ -106,8 +106,8 @@ export default class Route {
    * @param [children] optional subroutes
    * @returns processed route handler
    */
-  public static with(handler: RouteHandler, children?: RouteTree): RouteTree;
-  public static with(handler?: RouteHandler | RouteTree, children?: RouteTree): RouteTree {
+  public static with/* <T extends RouteChildren | undefined = undefined> */(handler/* : RouteHandler */, children?/* : T */)/* : T extends undefined ? RouteHandler : RouteTree<T> */;
+  public static with(handler, children?) {
     if (typeof handler === 'function') {
       if (children) {
         for (const route in children) {
@@ -139,7 +139,7 @@ export default class Route {
    * @param splitter to split the path by. Default is '/' ('route/path/example')
    * @returns a value from a given path. If a path is invalid - returns undefined.
    */
-  public static fromPath(routes: RouteTree, path: string | RegExp, method: RouteMethod, splitter?: string): RouteHandler {
+  public static fromPath(routes/* : RouteTree */, path: string | RegExp, method/* : RouteMethod */, splitter?: string)/* : RouteHandler */ {
     return this._fromPath(routes, path, method, splitter);
   }
 
@@ -147,12 +147,12 @@ export default class Route {
    * @todo document this shit
    */
   private static _fromPath(
-    routes: RouteTree,
+    routes/* : RouteTree */,
     path: string | RegExp,
-    method: RouteMethod,
+    method/* : RouteMethod */,
     splitter: string = '/',
-    nfHandler: RouteHandler = Route.NotFoundHandler // A default 404 handler
-  ): RouteHandler {
+    nfHandler/* : RouteHandler */ = Route.NotFoundHandler // A default 404 handler
+  )/* : RouteHandler */ {
     const toHandler = route => {
       if (!route) {
         return nfHandler;
