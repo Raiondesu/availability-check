@@ -8,7 +8,7 @@ import { parse as parseUrl } from 'url';
 import { StringDecoder } from 'string_decoder';
 import { readFileSync } from 'fs';
 
-// import { RouteTree, RouteData, RoutePayload, RouteMethod } from '../route/types';
+import {/*  RouteTree,  */RouteData, RoutePayload, RouteMethod } from '../route/types';
 import { StatusCodes } from './statuses';
 import Route from '../route';
 
@@ -128,7 +128,7 @@ export default class Server {
     const query = parsedUrl.query;
 
     // Get request method
-    const method = (req.method || 'GET').toUpperCase()/*  as RouteMethod */;
+    const method = (req.method || 'GET').toUpperCase() as RouteMethod;
 
     // Get headers as object
     const headers = req.headers;
@@ -173,7 +173,7 @@ export default class Server {
       }
 
       // Construct data to send to the handler
-      const data/* : RouteData */ = {
+      const data: RouteData<any, any> = {
         path: trimmedPath,
         query,
         headers,

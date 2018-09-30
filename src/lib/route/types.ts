@@ -15,17 +15,19 @@ import Route from '.';
 /**
  * Route Handler Payload
  */
-// export type RoutePayload<T = any> = {
-//   status: StatusCodes;
-//   payload?: T;
-// };
+export type RoutePayload<T> = {
+  status: StatusCodes;
+  payload?: T;
+};
+
+declare const p: RoutePayload<string>;
 
 /**
  * Route Handler's Request-data
  */
-export type RouteData<T = any> = {
+export type RouteData<T, Q extends ParsedUrlQuery> = {
   path: string;
-  query: ParsedUrlQuery;
+  query: Q;
   headers: OutgoingHttpHeaders;
   method: string;
   payload: T;

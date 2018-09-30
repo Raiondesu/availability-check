@@ -7,7 +7,7 @@ import { StatusCodes } from 'lib/server';
 
 // Complex handlers
 import users from './handlers/users';
-// import { RouteHandler, RoutePayload } from 'lib/route/types';
+import {/*  RouteHandler, */ RoutePayload } from 'lib/route/types';
 
 // Export final routing tree
 export default Route.with({

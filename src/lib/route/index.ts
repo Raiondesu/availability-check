@@ -1,5 +1,5 @@
-// import { RouteData, RouteHandler, RouteTree, RoutePayload, RouteMethod, RouteMethodHandlers, RouteChildren } from './types';
-import { StatusCodes } from '../server/statuses';
+import { RouteMethod } from './types';
+import { StatusCodes } from 'lib/server/statuses';
 
 /**
  * @todo document this shit
@@ -139,7 +139,7 @@ export default class Route/* <T extends RouteChildren | undefined = undefined> *
    * @param splitter to split the path by. Default is '/' ('route/path/example')
    * @returns a value from a given path. If a path is invalid - returns undefined.
    */
-  public static fromPath(routes/* : RouteTree */, path: string | RegExp, method/* : RouteMethod */, splitter?: string)/* : RouteHandler */ {
+  public static fromPath(routes/* : RouteTree */, path: string | RegExp, method: RouteMethod, splitter?: string)/* : RouteHandler */ {
     return this._fromPath(routes, path, method, splitter);
   }
 
@@ -149,7 +149,7 @@ export default class Route/* <T extends RouteChildren | undefined = undefined> *
   private static _fromPath(
     routes/* : RouteTree */,
     path: string | RegExp,
-    method/* : RouteMethod */,
+    method: RouteMethod,
     splitter: string = '/',
     nfHandler/* : RouteHandler */ = Route.NotFoundHandler // A default 404 handler
   )/* : RouteHandler */ {

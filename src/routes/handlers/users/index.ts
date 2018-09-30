@@ -1,7 +1,7 @@
 import { hash } from '@/util';
 import { StatusCodes } from 'lib/server';
 import DataManager from 'lib/data';
-import { RouteData, /* RoutePayload */ } from 'lib/route/types';
+import { RouteData, RoutePayload } from 'lib/route/types';
 import Route from 'lib/route';
 
 interface UserUpdate {
@@ -10,6 +10,7 @@ interface UserUpdate {
   phone: string;
   password?: string;
   tosAgreement?: any;
+  [x: string]: any;
 }
 
 interface UserResponse extends UserUpdate {
@@ -58,7 +59,7 @@ function validateFields(payload, required) {
 }
 
 export default new Route({
-  async POST(data: RouteData<UserRequest>)/* : Promise<RoutePayload<any>> */ {
+  async POST(data: RouteData<UserRequest, any>): Promise<RoutePayload<any>> {
     // Check user fields
     const required = {
       'firstName': 'string',
@@ -110,7 +111,7 @@ export default new Route({
 
   // Requres query parameter "phone"
   // @TODO: only let authenticated uses access their data
-  async GET(data: RouteData)/* : Promise<RoutePayload<UserResponse | string>> */ {
+  async GET(data: RouteData<any, UserUpdate>): Promise<RoutePayload<UserResponse | string>> {
     if (!data.query.phone) {
       return {
         status: StatusCodes.BadRequest,
@@ -142,7 +143,7 @@ export default new Route({
 
   // Required Field: phone
   // @TODO: only let authenticated uses access their data
-  async PUT(data: RouteData<UserUpdate>)/* : Promise<RoutePayload<string | UserResponse>> */ {
+  async PUT(data: RouteData<UserUpdate, any>): Promise<RoutePayload<string | UserResponse>> {
     validateFields(data.payload, {
       'phone': 'string'
     });
@@ -178,7 +179,7 @@ export default new Route({
   },
 
   // Required: phone query parameter
-  async DELETE(data: RouteData)/* : Promise<RoutePayload<UserResponse | string>> */ {
+  async DELETE(data: RouteData<any, UserUpdate>): Promise<RoutePayload<UserResponse | string>> {
     validateFields(data.query, {
       'phone': 'string'
     });
