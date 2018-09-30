@@ -139,7 +139,7 @@ export default class Route/* <T extends RouteChildren | undefined = undefined> *
    * @param splitter to split the path by. Default is '/' ('route/path/example')
    * @returns a value from a given path. If a path is invalid - returns undefined.
    */
-  public static fromPath(routes/* : RouteTree */, path: string | RegExp, method: RouteMethod, splitter?: string)/* : RouteHandler */ {
+  public static fromPath(routes/* : RouteTree */, path: string, method: RouteMethod, splitter?: string)/* : RouteHandler */ {
     return this._fromPath(routes, path, method, splitter);
   }
 
@@ -148,13 +148,34 @@ export default class Route/* <T extends RouteChildren | undefined = undefined> *
    */
   private static _fromPath(
     routes/* : RouteTree */,
-    path: string | RegExp,
+    path: string,
     method: RouteMethod,
     splitter: string = '/',
     nfHandler/* : RouteHandler */ = Route.NotFoundHandler // A default 404 handler
   )/* : RouteHandler */ {
-    const toHandler = route => {
+    const toHandler = (_routes, key?) => {
+      const route = key ? _routes[key] : _routes;
+
       if (!route) {
+
+        // RegExp routing if the route was not found
+        if (key && !(key in _routes)) {
+          const strRegExp = Object.keys(routes).find(k => k.startsWith('/') && k.endsWith('/'));
+
+          if (!strRegExp) {
+            return nfHandler;
+          }
+
+          const regExp = new RegExp(strRegExp.replace(/^\/|\/$/g, ''));
+
+          console.log('HERE', key, regExp);
+          if (!regExp.test(key)) {
+            return nfHandler;
+          }
+
+          return routes[strRegExp];
+        }
+
         return nfHandler;
       }
 
@@ -176,32 +197,27 @@ export default class Route/* <T extends RouteChildren | undefined = undefined> *
     if (!path)
       return toHandler(routes);
 
-    if (path instanceof RegExp) {
-      for (const key in routes) if (path.test(key)) {
-        return toHandler(routes[key]);
-      }
+    // if (path instanceof RegExp) {
+    //   for (const key in routes) if (path.test(key)) {
+    //     return toHandler(routes[key]);
+    //   }
 
-      return toHandler(routes['*'] || nfHandler);
-    }
+    //   return toHandler(routes['*'] || nfHandler);
+    // }
 
     const idx = path.indexOf(splitter);
 
     if (idx === -1)
-      return toHandler(routes[path]);
+      return toHandler(routes, path);
 
     const key = path.substring(0, idx);
 
-    if (!(key in routes)) {
-      return nfHandler;
-    }
-
     const nextPath = path.substr(idx).replace(splitter, '');
+    const nextRoute = toHandler(routes, key);
 
     if (!nextPath) {
-      return toHandler(routes[key]);
+      return nextRoute;
     }
-
-    const nextRoute = toHandler(routes[key]);
 
     return this._fromPath(
       nextRoute,

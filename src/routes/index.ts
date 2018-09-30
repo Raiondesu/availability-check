@@ -22,7 +22,11 @@ export default Route.with({
     'test': _ => ({
       status: StatusCodes.OK,
       payload: { test: 'Test 2-nd level sample handler' }
-    })
+    }),
+    '/(\\w+)/': _ => ({
+      status: StatusCodes.OK,
+      payload: { test: 'regex routes' }
+    }),
   }),
 
   // Hello handler
