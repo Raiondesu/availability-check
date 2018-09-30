@@ -1,0 +1,47 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+    "moduleResolution": "node",
+    "lib": [
+      "esnext",
+      "esnext.array",
+      "es2018",
+      "es2018.promise",
+      "es2018.regexp",
+      "es7",
+      "es6",
+      "es5",
+      "dom",
+      "es2015"
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"],
+      "lib/*": ["./src/lib/*"],
+      "routes/*": ["./src/routes/*"],
+      "@": ["./src"],
+      "lib": ["./src/lib"],
+      "routes": ["./src/routes"],
+      "config": ["./src/config"]
+    },
+		"allowJs": true,
+		"allowSyntheticDefaultImports": true,
+		"checkJs": true,
+		"experimentalDecorators": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": false,
+    "strict": true,
+    "removeComments": false,
+    "target": "es5",
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "types": [
+      "node"
+    ]
+	}
+}

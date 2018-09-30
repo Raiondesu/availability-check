@@ -16,22 +16,20 @@ If you want to clone this repository separately from the [root project](https://
 
 git clone https://github.com/Raiondesu/availability-check.git
 cd availability-check
-curl -o tsconfig.json https://raw.githubusercontent.com/Raiondesu/pirple-node-course/master/tsconfig.json
 
-npm i typescript ts-node ts-node-dev @types/node
+npm i typescript ts-node ts-node-dev tsconfig-paths @types/node
 rm package-lock.json
 ```
 
 ### Run
 **Option 1:** using ts-node-dev for easy reload on any file change
 ```bash
-NODE_ENV=%your_environment% ts-node-env index.ts
+./start.sh
 ```
 
 **Option 2:** using pure node.js
 ```bash
-tsc
-NODE_ENV=%your_environment% node index.js
+./start_node.sh
 ```
 
 ## API
