@@ -160,15 +160,17 @@ export default class Route/* <T extends RouteChildren | undefined = undefined> *
 
         // RegExp routing if the route was not found
         if (key && !(key in _routes)) {
-          const strRegExp = Object.keys(routes).find(k => k.startsWith('/') && k.endsWith('/'));
+          const strRegExp = Object.keys(routes).find(k => k.startsWith('/'));
 
           if (!strRegExp) {
             return nfHandler;
           }
 
-          const regExp = new RegExp(strRegExp.replace(/^\/|\/$/g, ''));
+          const flags = strRegExp.replace(/.*\/([gimy]*)$/, '$1');
+          const pattern = strRegExp.replace(new RegExp('^/(.*?)/'+flags+'$'), '$1');
 
-          console.log('HERE', key, regExp);
+          const regExp = new RegExp(pattern, flags);
+
           if (!regExp.test(key)) {
             return nfHandler;
           }
